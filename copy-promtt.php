@@ -37,7 +37,7 @@ function add_custom_styles() {
             right: 10px; /* Отступ справа */
             transform: translateY(-50%);
             background-color: #282736;
-            color: white;
+            color: #EC22B1;
             padding: 10px;
             border-top-left-radius: 5px;
             border-bottom-left-radius: 5px;
