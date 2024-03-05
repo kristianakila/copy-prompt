@@ -10,6 +10,7 @@
 /**
  * Load plugin textdomain.
  */
+
 // Добавляем стили
 function add_custom_styles() {
     echo '<style>
@@ -29,29 +30,29 @@ function add_custom_styles() {
             border-radius: 29px;
             color: white; /* Добавляем белый цвет текста */
             cursor: pointer; /* Делаем указатель при наведении */
+            overflow: hidden; /* Чтобы текст не выходил за пределы бокса */
+            position: relative; /* Необходимо для позиционирования абсолютных элементов */
         }
 
         .copy-message {
             position: absolute;
-            top: 50%;
-            right: 10px; /* Отступ справа */
-            transform: translateY(-50%);
-            background-color: #282736;
+            top: 84%;
+            right: 12%;
+            transform: translate(50%, -50%);
+            background-color: #3A3950;
             color: #EC22B1;
-            padding: 10px;
-            border-top-left-radius: 5px;
-            border-bottom-left-radius: 5px;
+            padding: 5px;
+            border-radius: 5px;
             cursor: pointer;
             visibility: hidden;
             opacity: 0;
-            transition: visibility 0s, opacity 0.5s linear, border-top-left-radius 0.5s ease-out;
+            transition: visibility 0s, opacity 0.5s linear;
             font-size: 16px; /* Размер шрифта */
         }
 
-        .copy-box:hover .copy-message {
+        .copy-box-container:hover .copy-message {
             visibility: visible;
             opacity: 1;
-            border-top-left-radius: 0; /* Убираем закругление при наведении */
         }
     </style>';
 }
@@ -71,20 +72,28 @@ function add_copy_script() {
                 copyMessage.className = "copy-message";
                 copyMessage.textContent = "Скопировать";
 
-                // Добавляем элемент справа от бокса
-                copyBox.appendChild(copyMessage);
+                // Добавляем элемент поверх бокса
+                promptContainer.appendChild(copyMessage);
 
-                // Обработчик клика
+                // Обработчик клика по боксу
                 copyBox.addEventListener("click", function() {
-                    var textToCopy = copyBox.innerText;
-                    navigator.clipboard.writeText(textToCopy).then(function() {
-                        copyMessage.textContent = "Скопировано!";
-                        setTimeout(function() {
-                            copyMessage.textContent = "Скопировать";
-                        }, 1500); // Сбрасываем сообщение через 1.5 секунды
-                    });
+                    copyTextToClipboard(copyBox.innerText, copyMessage);
+                });
+
+                // Обработчик клика по тексту
+                copyMessage.addEventListener("click", function() {
+                    copyTextToClipboard(copyBox.innerText, copyMessage);
                 });
             });
+
+            function copyTextToClipboard(text, messageElement) {
+                navigator.clipboard.writeText(text).then(function() {
+                    messageElement.textContent = "Скопировано!";
+                    setTimeout(function() {
+                        messageElement.textContent = "Скопировать";
+                    }, 1500); // Сбрасываем сообщение через 1.5 секунды
+                });
+            }
         });
     </script>';
 }
